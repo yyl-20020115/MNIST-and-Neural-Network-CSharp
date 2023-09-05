@@ -48,7 +48,7 @@ public partial class Form1 : Form
                 path += @"\";
             }
 
-            if (_DB.LoadDB(txtFilesPath.Text,trainSize,testSize) )
+            if (_DB.LoadDB(path,trainSize,testSize) )
             {
                 //MessageBox.Show("DB Load succefully!");
                 (sender as Button).Enabled = false;
