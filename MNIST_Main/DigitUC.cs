@@ -7,18 +7,15 @@ namespace MNIST_Main;
 public partial class DigitUC : UserControl
 {
 
-    private byte[][] m_Pixels;
+    private byte[,] m_Pixels;
 
-    public byte[][] Pixels
+    public byte[,] Pixels
     {
-        get { return m_Pixels; }
-        set 
-        { 
-            m_Pixels = value;
-            if (value != null)
-            {
+        get => m_Pixels;
+        set
+        {
+            if ((m_Pixels = value) != null)
                 UpdateDigit();
-            }
         }
     }
 
@@ -26,18 +23,23 @@ public partial class DigitUC : UserControl
     {
         var g = panel1.CreateGraphics();
 
-        for (int i = 0; i < Pixels.Length; i++)
+        for (int i = 0; i < Pixels.GetLength(0); i++)
         {
-            for (int j = 0; j < Pixels[i].Length; j++)
+            for (int j = 0; j < Pixels.GetLength(1); j++)
             {
-                if (Pixels[i][j] == 0)
+                var p = Pixels[i, j];
+                switch (p)
                 {
-                    g.DrawLine(new Pen(Brushes.White),j,i,j+1,i);
+                    case 0:
+                        g.FillRectangle(Brushes.White, j, i, 1, 1);
+                        break;
+                    case 255:
+                        g.FillRectangle(Brushes.Black, j, i, 1, 1);
+                        break;
+                    default:
+                        g.FillRectangle(Brushes.Gray, j, i, 1, 1);
+                        break;
                 }
-                else
-	                {
-                    g.DrawLine(new Pen(Brushes.Black), j, i, j+1, i);
-	                }
             }
         }
     }

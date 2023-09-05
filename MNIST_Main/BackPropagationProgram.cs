@@ -4,7 +4,7 @@ namespace NeuralNetworks;
 
 public class BackPropagationProgram
 {
-    public void Calc(string[] args)
+    public void Calc(string[] _)
     {
         try
         {
@@ -13,14 +13,14 @@ public class BackPropagationProgram
             Console.WriteLine("Creating a 3-input, 4-hidden, 2-output neural network");
             Console.WriteLine("Using sigmoid function for input-to-hidden activation");
             Console.WriteLine("Using tanh function for hidden-to-output activation");
-            NeuralNetwork nn = new NeuralNetwork(3, 4, 2);
+            var nn = new NeuralNetwork(3, 4, 2);
 
             // arbitrary weights and biases
-            double[] weights = new double[] {
-      0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2,
-      -2.0, -6.0, -1.0, -7.0,
-      1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
-      -2.5, -5.0 };
+            var weights = new double[] {
+              0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2,
+              -2.0, -6.0, -1.0, -7.0,
+              1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
+              -2.5, -5.0 };
 
             Console.WriteLine("\nInitial 26 random weights and biases are:");
             Utils.ShowVector(weights, 2, true);
@@ -29,26 +29,26 @@ public class BackPropagationProgram
             nn.SetWeights(weights);
 
             Console.WriteLine("\nSetting inputs:");
-            double[] xValues = new double[] { 1.0, 2.0, 3.0 };
+            var xValues = new double[] { 1.0, 2.0, 3.0 };
             Utils.ShowVector(xValues, 2, true);
 
-            double[] initialOutputs = nn.ComputeOutputs(xValues);
+            var initialOutputs = nn.ComputeOutputs(xValues);
             Console.WriteLine("Initial outputs:");
             Utils.ShowVector(initialOutputs, 4, true);
 
-            double[] tValues = new double[] { -0.8500, 0.7500 }; // target (desired) values. note these only make sense for tanh output activation
+            var tValues = new double[] { -0.8500, 0.7500 }; // target (desired) values. note these only make sense for tanh output activation
             Console.WriteLine("Target outputs to learn are:");
             Utils.ShowVector(tValues, 4, true);
 
-            double eta = 0.90;  // learning rate - controls the maginitude of the increase in the change in weights. found by trial and error.
-            double alpha = 0.04; // momentum - to discourage oscillation. found by trial and error.
+            var eta = 0.90;  // learning rate - controls the maginitude of the increase in the change in weights. found by trial and error.
+            var alpha = 0.04; // momentum - to discourage oscillation. found by trial and error.
             Console.WriteLine("Setting learning rate (eta) = " + eta.ToString("F2") + " and momentum (alpha) = " + alpha.ToString("F2"));
 
             Console.WriteLine("\nEntering main back-propagation compute-update cycle");
             Console.WriteLine("Stopping when sum absolute error <= 0.01 or 1,000 iterations\n");
-            int ctr = 0;
-            double[] yValues = nn.ComputeOutputs(xValues); // prime the back-propagation loop
-            double error = Error(tValues, yValues);
+            var ctr = 0;
+            var yValues = nn.ComputeOutputs(xValues); // prime the back-propagation loop
+            var error = Error(tValues, yValues);
             while (ctr < 1000 && error > 0.01)
             {
                 Console.WriteLine("===================================================");
@@ -65,7 +65,7 @@ public class BackPropagationProgram
             }
             Console.WriteLine("===================================================");
             Console.WriteLine("\nBest weights and biases found:");
-            double[] bestWeights = nn.GetWeights();
+            var bestWeights = nn.GetWeights();
             Utils.ShowVector(bestWeights, 2, true);
 
             Console.WriteLine("End Neural Network Back-Propagation demo\n");
@@ -80,12 +80,9 @@ public class BackPropagationProgram
 
     static double Error(double[] target, double[] output) // sum absolute error. could put into NeuralNetwork class.
     {
-        double sum = 0.0;
+        var sum = 0.0;
         for (int i = 0; i < target.Length; ++i)
             sum += Math.Abs(target[i] - output[i]);
         return sum;
     }
-
-} // class BackPropagation
-
-// ns
+}

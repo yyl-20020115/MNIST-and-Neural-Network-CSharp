@@ -1,33 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace MNIST_Core;
 
 public class MNISTCore
 {
-    private ReadMNIST _TrainingDB;
-    private ReadMNIST _TestDB;
+    private MNISTDatabase TrainingDB;
+    private MNISTDatabase TestDB;
 
     public MNISTCore() { }
 
-    public List<DigitImage> TrainingImages => _TrainingDB.Images;
-    public List<DigitImage> TestImages => _TestDB.Images;
+    public List<DigitImage> TrainingImages 
+        => TrainingDB.Images;
+    public List<DigitImage> TestImages
+        => TestDB.Images;
 
-    public Boolean LoadDB(string filesPath, int trainSize, int testSize)
+    public bool Load(string filesPath, int trainSize, int testSize)
     {
         try
         {
-            var testImagesPath = filesPath + "t10k-images.idx3-ubyte";
-            var testLabelsPath = filesPath + "t10k-labels.idx1-ubyte";
-            var trainingImagesPath = filesPath + "train-images.idx3-ubyte";
-            var trainingLabelsPath = filesPath + "train-labels.idx1-ubyte";
+            var testImagesPath = Path.Combine(filesPath , "t10k-images.idx3-ubyte");
+            var testLabelsPath = Path.Combine(filesPath , "t10k-labels.idx1-ubyte");
+            var trainingImagesPath = Path.Combine(filesPath, "train-images.idx3-ubyte");
+            var trainingLabelsPath = Path.Combine(filesPath, "train-labels.idx1-ubyte");
 
-            _TrainingDB = new ReadMNIST(trainingLabelsPath, trainingImagesPath, trainSize);
-            _TestDB = new ReadMNIST(testLabelsPath, testImagesPath, testSize);
+            TrainingDB = new (trainingLabelsPath, trainingImagesPath, trainSize);
+            TestDB = new (testLabelsPath, testImagesPath, testSize);
             return true;
         }
-        catch (Exception ex)
-        {
+        catch
+        { 
             return false;
         }
     }

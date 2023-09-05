@@ -1,4 +1,6 @@
-﻿namespace MNIST_Core;
+﻿using System.Text;
+
+namespace MNIST_Core;
 
 public class DigitImage
 {
@@ -7,56 +9,54 @@ public class DigitImage
 
     public byte Label;
 
-    public byte[][] Pixels;
+    public byte[,] Pixels;
 
     public double[] RawImage
     {
         get 
         {
-            double[] res = new double[SIZE];
+            var value = new double[SIZE];
 
             for(int i = 0; i < DIM_SIZE; i++)
             {
                 for(int j = 0; j < DIM_SIZE; j++)
                 {
-                    res[i * DIM_SIZE + j] = Pixels[j][i]/127.0 - 1.0;
+                    value[i * DIM_SIZE + j] = Pixels[j,i]/127.0 - 1.0;
                 }
             }
 
-            return res;
+            return value;
         }
     }
 
-    public DigitImage(byte[][] _pixels, byte _label)
+    public DigitImage(byte[,] _pixels, byte _label)
     {
-        Pixels = new byte[28][];
-        for (int i = 0; i < Pixels.Length; i++)
-            Pixels[i] = new byte[28];
+        Pixels = new byte[28,28];
 
         for (int i = 0; i < 28; i++)
             for (int j = 0; j < 28; j++)
-                Pixels[i][j] = _pixels[i][j];
+                Pixels[i, j] = _pixels[i, j];
 
-        Label = _label;
+        this.Label = _label;
     }
 
     public override string ToString()
     {
-        string s = "";
+        var builder = new StringBuilder();
         for (int i = 0; i < 28; i++)
         {
             for (int j = 0; j < 28; j++)
             {
-                if (Pixels[i][j] == 0)
-                    s += " "; //white
-                else if (Pixels[i][j] == 255)
-                    s += "0"; //black
+                if (Pixels[i, j] == 0)
+                    builder.Append(' '); //white
+                else if (Pixels[i, j] == 255)
+                    builder.Append('0'); //black
                 else
-                    s += "."; //gray
+                    builder.Append('.'); //gray
             }
-            s += "\n";
+            builder.AppendLine();
         }
-        s += Label.ToString();
-        return s;
+        builder.Append(this.Label);
+        return builder.ToString();
     }
 }
